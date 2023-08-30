@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { toast } from 'react-toastify';
-import {AiOutlineSearch} from "react-icons/ai";
+import { AiOutlineSearch } from 'react-icons/ai';
 import {
   Header,
   SearchForm,
@@ -10,57 +10,51 @@ import {
 } from './Searchbar.styled';
 
 const notifyOptions = {
-    position: "top-center",
-    autoClose: 1500,
-    hideProgressBar: false,
-    closeOnClick: true,
-    pauseOnHover: true,
-    draggable: true,
-    theme: "colored",
+  position: 'top-center',
+  autoClose: 1500,
+  hideProgressBar: false,
+  closeOnClick: true,
+  pauseOnHover: true,
+  draggable: true,
+  theme: 'colored',
 };
 
-class Searchbar extends Component {
-  state = {
-    inputValue: '',
+function Searchbar({ onSubmit }) {
+  const [inputValue, setInputValue] = useState('');
+
+  const handleChange = event => {
+    setInputValue(event.currentTarget.value.toLowerCase());
   };
 
-  handleChange = event => {
-    this.setState({ inputValue: event.currentTarget.value.toLowerCase() });
-  };
-
-  handleSubmit = event => {
+  const handleSubmit = event => {
     event.preventDefault();
-    const { inputValue } = this.state;
     if (inputValue.trim() === '') {
       return toast.info('Please enter key words', notifyOptions);
     }
-    this.props.onSubmit(inputValue);
-    this.clearForm();
+    onSubmit(inputValue);
+    clearForm();
   };
-  clearForm = () => {
-    this.setState({inputValue: ""});
+  const clearForm = () => {
+    setInputValue('');
   };
 
-  render() {
-    const { inputValue } = this.state;
-    return (
-      <Header>
-        <SearchForm onSubmit={this.handleSubmit}>
-          <SearchFormBtn type="submit">
-            <AiOutlineSearch size="30" />
-          </SearchFormBtn>
-          <SearchFormInput
-            type="text"
-            autoComplete="off"
-            autoFocus
-            placeholder="All search images and fotos"
-            value={inputValue}
-            onChange={this.handleChange}
-          />
-        </SearchForm>
-      </Header>
-    );
-  }
+  return (
+    <Header>
+      <SearchForm onSubmit={handleSubmit}>
+        <SearchFormBtn type="submit">
+          <AiOutlineSearch size="30" />
+        </SearchFormBtn>
+        <SearchFormInput
+          type="text"
+          autoComplete="off"
+          autoFocus
+          placeholder="All search images and fotos"
+          value={inputValue}
+          onChange={handleChange}
+        />
+      </SearchForm>
+    </Header>
+  );
 }
 
 Searchbar.propTypes = {
@@ -68,3 +62,4 @@ Searchbar.propTypes = {
 };
 
 export default Searchbar;
+
